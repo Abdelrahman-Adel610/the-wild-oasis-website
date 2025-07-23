@@ -1,6 +1,9 @@
+"use client";
 import { isWithinInterval } from "date-fns";
+import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { handleDateSelect, useReservationContext } from "./ReservationContext";
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -12,30 +15,38 @@ function isAlreadyBooked(range, datesArr) {
   );
 }
 
-function DateSelector() {
+function DateSelector({ minBookingPeriod, maxBookingPeriod }) {
   // CHANGE
   const regularPrice = 23;
   const discount = 23;
   const numNights = 23;
   const cabinPrice = 23;
-  const range = { from: null, to: null };
-
-  // SETTINGS
-  const minBookingLength = 1;
-  const maxBookingLength = 23;
-
+  const { range, setRange } = useReservationContext();
   return (
     <div className="flex flex-col justify-between">
       <DayPicker
-        className="pt-12 place-self-center"
+        className="py-6 place-self-center text-primary-200 rdp"
         mode="range"
-        min={minBookingLength + 1}
-        max={maxBookingLength}
+        min={minBookingPeriod + 1}
+        max={maxBookingPeriod}
         fromMonth={new Date()}
         fromDate={new Date()}
         toYear={new Date().getFullYear() + 5}
         captionLayout="dropdown"
-        numberOfMonths={2}
+        numberOfMonths={1}
+        onSelect={(new_range) => {
+          console.log(new_range);
+
+          if (range.from && range.to) {
+            setRange();
+            setRange({
+              from:
+                new_range.from === range.from ? new_range.to : new_range.from,
+              to: null,
+            });
+          } else setRange(new_range);
+        }}
+        selected={range}
       />
 
       <div className="flex items-center justify-between px-8 bg-accent-500 text-primary-800 h-[72px]">
@@ -68,8 +79,8 @@ function DateSelector() {
 
         {range.from || range.to ? (
           <button
-            className="border border-primary-800 py-2 px-4 text-sm font-semibold"
-            onClick={() => resetRange()}
+            className="border border-primary-800 py-2 px-4 text-sm font-semibold rounded-2xl hover:bg-primary-800 hover:text-accent-500 cursor-pointer transition duration-100"
+            onClick={() => setRange({ from: null, to: null })}
           >
             Clear
           </button>

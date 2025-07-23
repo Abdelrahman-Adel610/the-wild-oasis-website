@@ -1,7 +1,10 @@
+import Spinner from "@/app/_components/Spinner";
 import TextExpander from "@/app/_components/TextExpander";
 import { getCabin } from "@/app/_lib/data-service";
 import { EyeSlashIcon, MapPinIcon, UsersIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { Suspense } from "react";
+import Reservation from "./Reservation";
 export async function generateMetadata({ params }) {
   const { cabinId } = await params;
   const { name } = await getCabin(cabinId);
@@ -11,7 +14,8 @@ export async function generateMetadata({ params }) {
 }
 export default async function page({ params }) {
   const { cabinId } = await params;
-  const { name, maxCapacity, image, description } = await getCabin(cabinId);
+  const cabin = await getCabin(cabinId);
+  const { name, maxCapacity, image, description } = cabin;
 
   return (
     <div className="max-w-6xl mx-auto mt-8">
@@ -58,12 +62,14 @@ export default async function page({ params }) {
           </ul>
         </div>
       </div>
-
       <div>
         <h2 className="text-5xl font-semibold text-center">
-          Reserve today. Pay on arrival.
+          Reserve {name} today. Pay on arrival.
         </h2>
       </div>
+      <Suspense fallback={<Spinner />}>
+        <Reservation cabin={cabin}  />
+      </Suspense>
     </div>
   );
 }
