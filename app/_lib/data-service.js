@@ -52,10 +52,11 @@ export const getCabins = async function () {
 // Guests are uniquely identified by their email address
 export async function getGuest(email) {
   const { data, error } = await supabase
-    .from("guests")
+    .from("Guests")
     .select("*")
     .eq("email", email)
     .single();
+  console.log("HEEEEY~!!", data, email);
 
   // No error here! We handle the possibility of no guest in the sign in callback
   return data;
@@ -151,10 +152,10 @@ export async function getCountries() {
 // CREATE
 
 export async function createGuest(newGuest) {
-  const { data, error } = await supabase.from("guests").insert([newGuest]);
+  const { data, error } = await supabase.from("Guests").insert([newGuest]);
 
   if (error) {
-    console.error(error);
+    console.log("zzzz:", error.message);
     throw new Error("Guest could not be created");
   }
 
@@ -183,7 +184,7 @@ export async function createBooking(newBooking) {
 // The updatedFields is an object which should ONLY contain the updated data
 export async function updateGuest(id, updatedFields) {
   const { data, error } = await supabase
-    .from("guests")
+    .from("Guests")
     .update(updatedFields)
     .eq("id", id)
     .select()

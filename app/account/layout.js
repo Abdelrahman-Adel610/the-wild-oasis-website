@@ -1,4 +1,5 @@
 import SideNavigation from "@/app/_components/SideNavigation";
+import SignOutButton from "../_components/SignOutButton";
 
 export default function Layout({ children }) {
   return (
