@@ -27,7 +27,6 @@ const navLinks = [
 
 function SideNavigation({ signout_btn }) {
   const pathname = usePathname();
-  console.log(pathname);
 
   return (
     <nav className="border-r border-primary-900">

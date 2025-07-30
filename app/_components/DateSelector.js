@@ -35,7 +35,6 @@ function DateSelector({ minBookingPeriod, maxBookingPeriod }) {
         captionLayout="dropdown"
         numberOfMonths={1}
         onSelect={(new_range) => {
-          console.log(new_range);
 
           if (range.from && range.to) {
             setRange();

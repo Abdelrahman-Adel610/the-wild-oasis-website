@@ -63,7 +63,7 @@ export async function getGuest(email) {
 
 export async function getBooking(id) {
   const { data, error, count } = await supabase
-    .from("bookings")
+    .from("Bookings")
     .select("*")
     .eq("id", id)
     .single();
@@ -153,7 +153,6 @@ export async function createGuest(newGuest) {
   const { data, error } = await supabase.from("Guests").insert([newGuest]);
 
   if (error) {
-    console.log("zzzz:", error.message);
     throw new Error("Guest could not be created");
   }
 
@@ -162,7 +161,7 @@ export async function createGuest(newGuest) {
 
 export async function createBooking(newBooking) {
   const { data, error } = await supabase
-    .from("bookings")
+    .from("Bookings")
     .insert([newBooking])
     // So that the newly created object gets returned!
     .select()
@@ -181,7 +180,6 @@ export async function createBooking(newBooking) {
 
 // The updatedFields is an object which should ONLY contain the updated data
 export async function updateGuest(id, updatedFields) {
-  console.log("ABDO:", id, updatedFields);
 
   const { data, error } = await supabase
     .from("Guests")
@@ -199,7 +197,7 @@ export async function updateGuest(id, updatedFields) {
 
 export async function updateBooking(id, updatedFields) {
   const { data, error } = await supabase
-    .from("bookings")
+    .from("Bookings")
     .update(updatedFields)
     .eq("id", id)
     .select()
@@ -216,7 +214,7 @@ export async function updateBooking(id, updatedFields) {
 // DELETE
 
 export async function deleteBooking(id) {
-  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+  const { data, error } = await supabase.from("Bookings").delete().eq("id", id);
 
   if (error) {
     console.error(error);

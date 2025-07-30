@@ -5,7 +5,6 @@ import { auth, signIn, signOut } from "./auth";
 import { updateGuest } from "./data-service";
 
 export async function signInAction(data) {
-  console.log(data.get("provider"));
   await signIn(data.get("provider"), { redirectTo: "/" });
 }
 export async function signOutAction() {
@@ -16,12 +15,7 @@ export async function updateMe(data) {
   if (!session) throw new Error("You must login first");
   const [nationality, flag] = data.get("nationality").split("%");
   const nationalId = data.get("nationalID");
-  console.log(
-    "daaaaaaaaa",
-    /^[A-Za-z0-1]{6,20}$/.test(nationalId),
-    nationalId,
-    data
-  );
+
 
   if (!/^[A-Za-z0-9]{6,20}$/.test(nationalId))
     throw new Error("Invalid nationalId");

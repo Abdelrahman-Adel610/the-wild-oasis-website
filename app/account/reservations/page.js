@@ -7,7 +7,6 @@ import { use } from "react";
 export default function Page() {
   const session = use(auth());
   const bookings = use(getBookings(session.user.id));
-  console.log("user:", session, "bookings:", bookings);
 
   return (
     <div>
