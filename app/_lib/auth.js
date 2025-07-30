@@ -44,6 +44,9 @@ export const {
     async session({ session }) {
       const my_user = await getGuest(session.user.email);
       session.user.id = my_user?.id;
+      session.user.nationalId = my_user.nationalId;
+      session.user.nationality = my_user.nationality;
+      session.user.flag = my_user.flag;
       return session;
     },
   },
