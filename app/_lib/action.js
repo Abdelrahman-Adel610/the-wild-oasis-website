@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { auth, signIn, signOut } from "./auth";
 import {
+  createBooking,
   deleteBooking,
   getBookings,
   updateBooking,
@@ -60,4 +61,16 @@ export async function updateReservation(data) {
   };
   await updateBooking(id, updatedData);
   redirect("/account/reservations");
+}
+export async function createReservation(data, formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must login first");
+  const reservationData = {
+    ...data,
+    hasBreakfast: data.hasBreakfast,
+    numberOfGuests: +formData.get("numberOfGuests"),
+    observations: formData.get("observations"),
+  };
+  await createBooking(reservationData);
+  redirect("/cabins/ThankYou");
 }

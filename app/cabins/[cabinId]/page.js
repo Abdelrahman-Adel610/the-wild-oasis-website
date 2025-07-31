@@ -62,13 +62,8 @@ export default async function page({ params }) {
           </ul>
         </div>
       </div>
-      <div>
-        <h2 className="text-5xl font-semibold text-center">
-          Reserve {name} today. Pay on arrival.
-        </h2>
-      </div>
       <Suspense fallback={<Spinner />}>
-        <Reservation cabin={cabin}  />
+        <Reservation cabin={cabin} />
       </Suspense>
     </div>
   );

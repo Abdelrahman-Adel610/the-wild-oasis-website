@@ -80,7 +80,7 @@ export async function getBookings(guestId) {
   const { data, error, count } = await supabase
     .from("Bookings")
     .select(
-      "id, created_at, startDate, endDate, numberOfNights, numberOfGuests, price, guestId, cabinId, Cabins(name, image)"
+      "id, created_at, startDate, endDate, numberOfNights, numberOfGuests, price,finalPrice, guestId, cabinId, Cabins(name, image)"
     )
     .eq("guestId", guestId)
     .order("startDate");
@@ -132,6 +132,20 @@ export async function getSettings() {
   return data;
 }
 
+export async function getBreakfastPrice() {
+  const { data, error } = await supabase
+    .from("Settings")
+    .select("breakfastPrice")
+    .single();
+
+  if (error) {
+    console.error(error);
+    return { breakfastPrice: 5 }; // Default fallback
+  }
+
+  return data;
+}
+
 export async function getCountries() {
   try {
     const res = await fetch(
@@ -161,7 +175,6 @@ export async function createBooking(newBooking) {
   const { data, error } = await supabase
     .from("Bookings")
     .insert([newBooking])
-    // So that the newly created object gets returned!
     .select()
     .single();
 

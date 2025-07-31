@@ -16,7 +16,7 @@ function ReservationCard({ booking, deletefn }) {
     startDate,
     endDate,
     numberOfNights,
-    price,
+    finalPrice,
     numberOfGuests,
     status,
     created_at,
@@ -59,7 +59,7 @@ function ReservationCard({ booking, deletefn }) {
         </p>
 
         <div className="flex gap-5 mt-auto items-baseline">
-          <p className="text-xl font-semibold text-accent-400">${price}</p>
+          <p className="text-xl font-semibold text-accent-400">${finalPrice}</p>
           <p className="text-primary-300">&bull;</p>
           <p className="text-lg text-primary-300">
             {numberOfGuests} guest{numberOfGuests > 1 && "s"}

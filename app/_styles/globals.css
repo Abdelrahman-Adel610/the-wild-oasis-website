@@ -54,10 +54,78 @@
   }
 }
 
-/* For data picker */
+/* For date picker */
 .rdp {
-  --rdp-cell-size: 32px !important;
+  --rdp-cell-size: 40px !important;
   --rdp-accent-color: theme('colors.accent.500') !important;
   --rdp-background-color: theme('colors.accent.600') !important;
+  --rdp-accent-color-dark: theme('colors.accent.600') !important;
+  --rdp-background-color-dark: theme('colors.accent.500') !important;
+  --rdp-outline: 2px solid theme('colors.accent.500') !important;
+  --rdp-outline-selected: 3px solid theme('colors.accent.400') !important;
   margin: 0 !important;
-}  
+  font-size: 0.875rem !important;
+}
+
+.rdp-months {
+  display: flex;
+  justify-content: center;
+}
+
+.rdp-month {
+  margin: 0 !important;
+}
+
+.rdp-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem !important;
+  color: theme('colors.primary.200') !important;
+  font-weight: 600 !important;
+}
+
+.rdp-head_cell {
+  color: theme('colors.primary.300') !important;
+  font-weight: 500 !important;
+  text-align: center;
+  padding: 0.5rem !important;
+}
+
+.rdp-cell {
+  text-align: center;
+}
+
+.rdp-button {
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+}
+
+.rdp-button:hover {
+  background-color: theme('colors.accent.500/20') !important;
+  border-color: theme('colors.accent.500') !important;
+}
+
+.rdp-button:disabled {
+  opacity: 0.4 !important;
+  cursor: not-allowed !important;
+}
+
+.rdp-day_selected {
+  background-color: theme('colors.accent.500') !important;
+  color: theme('colors.primary.900') !important;
+  font-weight: 600 !important;
+}
+
+.rdp-day_range_start,
+.rdp-day_range_end {
+  background-color: theme('colors.accent.600') !important;
+  color: theme('colors.primary.100') !important;
+}
+
+.rdp-day_range_middle {
+  background-color: theme('colors.accent.500/30') !important;
+  color: theme('colors.primary.200') !important;
+}

@@ -1,70 +1,173 @@
 "use client";
 import Image from "next/image";
 import { useReservationContext } from "./ReservationContext";
+import { differenceInDays, format } from "date-fns";
+import { createReservation } from "@/app/_lib/action";
+import {
+  UserIcon,
+  ChatBubbleLeftRightIcon,
+  CalendarDaysIcon,
+} from "@heroicons/react/24/solid";
+import { useState } from "react";
+import PriceSummary from "./PriceSummary";
+import SubmitButton from "./SubmitButton";
 
-function ReservationForm({ bookedDates, maxCapacity, user }) {
-  // CHANGE
-  const { range } = useReservationContext();
-  const numNights = Math.abs(range.from - range.to) / (1000 * 60 * 60 * 24);
-  return (
-    <div className="scale-[1.01]">
-      <div className="bg-primary-800 text-primary-300 px-16 py-2 flex justify-between items-center">
-        <p>Logged in as</p>
+function ReservationForm({
+  bookedDates,
+  maxCapacity,
+  user,
+  cabin,
+  breakfastPrice,
+}) {
+  const { range, resetRange } = useReservationContext();
+  const [numGuests, setNumGuests] = useState(1);
+  const [hasBreakfast, setHasBreakfast] = useState(false);
 
-        <div className="flex gap-4 items-center">
-          <Image
-            width={42}
-            height={42}
-            // Important to display google profile images
-            referrerPolicy="no-referrer"
-            className=" rounded-full "
-            src={user.image}
-            alt={user.name}
-          />
-          <p>{user.name}</p>
+  const startDate = range?.from;
+  const endDate = range?.to;
+  const numNights = differenceInDays(endDate, startDate);
+
+  const cabinPrice = numNights * (cabin.price - cabin.discount);
+  const breakfastTotal = hasBreakfast
+    ? numNights * numGuests * breakfastPrice
+    : 0;
+  const totalPrice = cabinPrice + breakfastTotal;
+
+  const bookingData = {
+    startDate,
+    endDate,
+    numberOfNights: numNights,
+    price: cabinPrice,
+    finalPrice: totalPrice,
+    cabinId: cabin.id,
+    guestId: user.id,
+    hasBreakfast,
+    finalPrice: totalPrice,
+  };
+
+  const createReservationWithData = createReservation.bind(null, bookingData);
+
+  if (!startDate || !endDate) {
+    return (
+      <div className="p-8 flex items-center justify-center h-full">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-primary-800 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CalendarDaysIcon className="w-8 h-8 text-accent-500" />
+          </div>
+          <h3 className="text-lg font-semibold text-primary-200 mb-2">
+            Select Your Dates
+          </h3>
+          <p className="text-primary-400 text-sm">
+            Choose your check-in and check-out dates to continue
+          </p>
         </div>
       </div>
+    );
+  }
 
-      <form className="bg-primary-900 py-10 px-16 text-lg flex gap-5 flex-col">
-        <div className="space-y-2">
-          <label htmlFor="numGuests">How many guests?</label>
-          <select
-            name="numGuests"
-            id="numGuests"
-            className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-            required
-          >
-            <option value="" key="">
-              Select number of guests...
-            </option>
-            {Array.from({ length: maxCapacity }, (_, i) => i + 1).map((x) => (
-              <option value={x} key={x}>
-                {x} {x === 1 ? "guest" : "guests"}
-              </option>
-            ))}
-          </select>
-        </div>
+  return (
+    <div className="h-full flex flex-col">
+      {/* Price Summary */}
+      <PriceSummary
+        numberOfNights={numNights}
+        cabinPrice={cabinPrice}
+        breakfastTotal={breakfastTotal}
+        totalPrice={totalPrice}
+        hasBreakfast={hasBreakfast}
+      />
 
-        <div className="space-y-2">
-          <label htmlFor="observations">
-            Anything we should know about your stay?
-          </label>
-          <textarea
-            name="observations"
-            id="observations"
-            className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-            placeholder="Any pets, allergies, special requirements, etc.?"
-          />
-        </div>
+      {/* Form */}
+      <div className="flex-1 p-6">
+        <form
+          action={async (formData) => {
+            await createReservationWithData(formData);
+            resetRange();
+          }}
+          className="space-y-6"
+        >
+          {/* Guest Information */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-primary-200 mb-3">
+              <UserIcon className="w-5 h-5 text-accent-500" />
+              <h3 className="font-semibold">Guest Information</h3>
+            </div>
 
-        <div className="flex justify-end items-center gap-6">
-          <p className="text-primary-300 text-base">Start by selecting dates</p>
+            <div className="bg-primary-800 rounded-lg p-4 border border-primary-700">
+              <p className="text-sm text-primary-300 mb-1">Primary Guest</p>
+              <p className="text-primary-100 font-medium">{user.name}</p>
+              <p className="text-sm text-primary-400">{user.email}</p>
+            </div>
+          </div>
 
-          <button className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300">
-            Reserve now
-          </button>
-        </div>
-      </form>
+          {/* Number of Guests */}
+          <div className="space-y-3">
+            <label className="block text-sm font-medium text-primary-200">
+              How many guests?
+            </label>
+            <select
+              name="numberOfGuests"
+              value={numGuests}
+              onChange={(e) => setNumGuests(Number(e.target.value))}
+              className="w-full bg-primary-800 border border-primary-700 rounded-lg px-4 py-3 text-primary-100 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none transition-colors"
+              required
+            >
+              {Array.from({ length: cabin.maxCapacity }, (_, i) => i + 1).map(
+                (x) => (
+                  <option value={x} key={x}>
+                    {x} {x === 1 ? "guest" : "guests"}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+
+          {/* Breakfast Option */}
+          <div className="bg-primary-800/50 rounded-lg p-4 border border-primary-700/50">
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={hasBreakfast}
+                onChange={(e) => setHasBreakfast(e.target.checked)}
+                className="mt-1 w-4 h-4 text-accent-500 bg-primary-700 border-primary-600 rounded focus:ring-accent-500 focus:ring-2"
+              />
+              <div className="flex-1">
+                <div className="font-medium text-primary-200">
+                  Add breakfast
+                </div>
+                <div className="text-sm text-primary-400 mt-1">
+                  ${breakfastPrice} per person per night
+                </div>
+                {hasBreakfast && (
+                  <div className="text-sm text-accent-400 mt-1">
+                    Total breakfast cost: ${breakfastTotal}
+                  </div>
+                )}
+              </div>
+            </label>
+          </div>
+
+          {/* Special Requests */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-primary-200">
+              <ChatBubbleLeftRightIcon className="w-4 h-4 text-accent-500" />
+              <label className="text-sm font-medium">
+                Anything we should know about your stay?
+              </label>
+            </div>
+            <textarea
+              name="observations"
+              className="w-full bg-primary-800 border border-primary-700 rounded-lg px-4 py-3 text-primary-100 placeholder-primary-400 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 focus:outline-none transition-colors resize-none"
+              placeholder="Any pets, allergies, special requirements, etc.?"
+              rows="3"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="pt-4 border-t border-primary-800">
+            <SubmitButton>Reserve Now</SubmitButton>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
