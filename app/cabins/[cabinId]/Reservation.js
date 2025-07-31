@@ -9,15 +9,22 @@ export default async function Reservation({ cabin }) {
     { minBookingPeriod, maxBookingPeriod, maxGuestsPerBooking: maxCapacity },
     bookedDates,
   ] = await Promise.all([getSettings(), getBookedDatesByCabinId(cabin.id)]);
+
   const session = await auth();
   return (
     <div className={`grid grid-cols-2 border border-primary-800 min-h-[400px]`}>
       <DateSelector
         maxBookingPeriod={maxBookingPeriod}
         minBookingPeriod={minBookingPeriod}
+        cabin={cabin}
+        bookings={bookedDates}
       />
       {session ? (
-        <ReservationForm bookedDates={bookedDates} maxCapacity={maxCapacity} user={session.user} />
+        <ReservationForm
+          bookedDates={bookedDates}
+          maxCapacity={cabin.maxCapacity}
+          user={session.user}
+        />
       ) : (
         <LoginMessage />
       )}

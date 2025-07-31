@@ -111,14 +111,12 @@ export async function getBookedDatesByCabinId(cabinId) {
   }
 
   // Converting to actual dates to be displayed in the date picker
-  const bookedDates = data
-    .map((booking) => {
-      return eachDayOfInterval({
-        start: new Date(booking.startDate),
-        end: new Date(booking.endDate),
-      });
-    })
-    .flat();
+  const bookedDates = data.map((booking) => {
+    return {
+      start: new Date(booking.startDate),
+      end: new Date(booking.endDate),
+    };
+  });
 
   return bookedDates;
 }
@@ -180,7 +178,6 @@ export async function createBooking(newBooking) {
 
 // The updatedFields is an object which should ONLY contain the updated data
 export async function updateGuest(id, updatedFields) {
-
   const { data, error } = await supabase
     .from("Guests")
     .update(updatedFields)
@@ -202,7 +199,7 @@ export async function updateBooking(id, updatedFields) {
     .eq("id", id)
     .select()
     .single();
-  
+
   if (error) {
     console.error(error);
     throw new Error("Booking could not be updated");

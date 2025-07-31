@@ -1,16 +1,23 @@
+"use client";
+import Image from "next/image";
+import { useReservationContext } from "./ReservationContext";
+
 function ReservationForm({ bookedDates, maxCapacity, user }) {
   // CHANGE
-
+  const { range } = useReservationContext();
+  const numNights = Math.abs(range.from - range.to) / (1000 * 60 * 60 * 24);
   return (
     <div className="scale-[1.01]">
       <div className="bg-primary-800 text-primary-300 px-16 py-2 flex justify-between items-center">
         <p>Logged in as</p>
 
         <div className="flex gap-4 items-center">
-          <img
+          <Image
+            width={42}
+            height={42}
             // Important to display google profile images
             referrerPolicy="no-referrer"
-            className="h-8 rounded-full"
+            className=" rounded-full "
             src={user.image}
             alt={user.name}
           />
