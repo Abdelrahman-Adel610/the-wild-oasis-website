@@ -9,7 +9,6 @@ export default function Page({ params }) {
   const reservatationInfo = use(getBooking(reservationId));
 
   const cabin = use(getCabin(reservatationInfo.cabinId));
-  console.log(cabin);
 
   const { maxCapacity } = cabin;
 
