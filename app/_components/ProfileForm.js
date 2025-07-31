@@ -53,7 +53,7 @@ export default function ProfileForm({ selectCountry, user }) {
       </div>
 
       <div className="flex justify-end items-center gap-6">
-        <FormBtn />
+        <FormBtn>Update profile</FormBtn>
       </div>
     </form>
   );
