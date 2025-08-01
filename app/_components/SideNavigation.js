@@ -26,30 +26,31 @@ const navLinks = [
   },
 ];
 
-function SideNavigation({ signout_btn }) {
+function SideNavigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="border-r border-primary-900">
-      <ul className="flex flex-col gap-2 h-full text-lg">
-        {navLinks.map((link) => (
-          <li key={link.name}>
-            <Link
-              className={`py-3 px-5 hover:bg-primary-900 hover:text-primary-100 transition-colors flex items-center gap-4 font-semibold text-primary-200
+    <nav className="border-r border-primary-900 lg:border-r-0 lg:border-b lg:border-primary-900 lg:pb-4 flex">
+      <ul className="flex  lg:flex-col gap-2 h-full text-base lg:text-lg overflow-x-auto lg:overflow-x-visible justify-between w-full">
+        <div className="flex  lg:flex-col gap-2 h-full text-base lg:text-lg overflow-x-auto lg:overflow-x-visible">
+          {navLinks.map((link) => (
+            <li key={link.name} className="flex-shrink-0">
+              <Link
+                className={`py-2 px-3 lg:py-3 lg:px-5 hover:bg-primary-900 hover:text-primary-100 transition-colors flex items-center gap-2 lg:gap-4 font-semibold text-primary-200 whitespace-nowrap
                 ${
                   pathname === link.href
                     ? "text-primary-100 bg-primary-900"
                     : ""
                 }
                 `}
-              href={link.href}
-            >
-              {link.icon}
-              <span>{link.name}</span>
-            </Link>
-          </li>
-        ))}
-
+                href={link.href}
+              >
+                {link.icon}
+                <span className="hidden sm:inline">{link.name}</span>
+              </Link>
+            </li>
+          ))}
+        </div>
         <li className="mt-auto">
           <SignOutButton />
         </li>

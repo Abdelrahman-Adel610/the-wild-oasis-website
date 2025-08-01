@@ -34,9 +34,9 @@ function ReservationCard({ booking, deletefn }) {
         />
       </div>
 
-      <div className="flex-grow px-6 py-3 flex flex-col">
-        <div className="flex items-center justify-between">
-          <h3 className="text-xl font-semibold">
+      <div className="flex-grow px-3 sm:px-6 py-3 flex flex-col">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h3 className="text-lg sm:text-xl font-semibold">
             {numberOfNights} nights in Cabin {name}
           </h3>
           {isPast(new Date(startDate)) ? (

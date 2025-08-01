@@ -18,7 +18,7 @@ function PriceSummary({
   if (!range.from || !range.to) return null;
 
   return (
-    <div className="bg-gradient-to-r from-accent-500 to-accent-400 text-primary-900 px-8 py-6">
+    <div className="bg-gradient-to-r from-accent-500 to-accent-400 text-primary-900 px-4 sm:px-8 py-4 sm:py-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex-1">
           <h3 className="text-2xl font-bold mb-2">

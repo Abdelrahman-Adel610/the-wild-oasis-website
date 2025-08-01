@@ -5,17 +5,17 @@ import Link from "next/link";
 function CabinCard({ cabin }) {
   const { id, name, maxCapacity, price, discount, image } = cabin;
   return (
-    <div className="flex border-primary-800 border">
-      <div className="relative w-1/3">
+    <div className="flex flex-col sm:flex-row border-primary-800 border">
+      <div className="relative h-48 sm:h-auto sm:w-1/3">
         <Image
           fill
           src={image}
           alt={`Cabin ${name}`}
-          className=" border-r border-primary-800 object-cover "
+          className="sm:border-r border-primary-800 object-cover"
         />
       </div>
-      <div className="flex-grow w-2/3">
-        <div className="pt-5 pb-4 px-7 bg-primary-950">
+      <div className="flex-grow sm:w-2/3">
+        <div className="pt-4 sm:pt-5 pb-4 px-4 sm:px-7 bg-primary-950">
           <h3 className="text-accent-500 font-semibold text-2xl mb-3">
             Cabin {name}
           </h3>

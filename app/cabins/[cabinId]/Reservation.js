@@ -24,8 +24,8 @@ export default async function Reservation({ cabin }) {
   return (
     <div className="bg-primary-950 border border-primary-800 rounded-xl overflow-hidden">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary-800 to-primary-700 px-8 py-6 border-b border-primary-700">
-        <h2 className="text-2xl font-bold text-primary-100 mb-2">
+      <div className="bg-gradient-to-r from-primary-800 to-primary-700 px-4 sm:px-8 py-4 sm:py-6 border-b border-primary-700">
+        <h2 className="text-xl sm:text-2xl font-bold text-primary-100 mb-2">
           Reserve Bear&apos;s Den Today
         </h2>
         <p className="text-primary-300 text-sm">
@@ -34,10 +34,10 @@ export default async function Reservation({ cabin }) {
       </div>
 
       {/* Main Content */}
-      <div className="grid lg:grid-cols-[1fr_400px] min-h-[600px]">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] min-h-[600px]">
         {/* Date Selection */}
-        <div className="bg-primary-900 border-r border-primary-800">
-          <div className="p-6">
+        <div className="bg-primary-900 lg:border-r border-primary-800">
+          <div className="p-4 sm:p-6">
             <h3 className="text-lg font-semibold text-primary-200 mb-4 flex items-center gap-2">
               <CalendarDaysIcon className="h-5 w-5 text-accent-500" />
               Select Your Dates
