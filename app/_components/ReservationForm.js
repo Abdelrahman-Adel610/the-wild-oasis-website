@@ -7,10 +7,13 @@ import {
   UserIcon,
   ChatBubbleLeftRightIcon,
   CalendarDaysIcon,
+  CreditCardIcon,
+  BanknotesIcon,
 } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import PriceSummary from "./PriceSummary";
 import SubmitButton from "./SubmitButton";
+import PaymentMethodSelector from "./PaymentMethodSelector";
 
 function ReservationForm({
   bookedDates,
@@ -22,6 +25,7 @@ function ReservationForm({
   const { range, resetRange } = useReservationContext();
   const [numGuests, setNumGuests] = useState(1);
   const [hasBreakfast, setHasBreakfast] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const startDate = range?.from;
   const endDate = range?.to;
@@ -42,6 +46,7 @@ function ReservationForm({
     cabinId: cabin.id,
     guestId: user.id,
     hasBreakfast,
+    isPaid: paymentMethod === "online",
     finalPrice: totalPrice,
   };
 
@@ -80,8 +85,8 @@ function ReservationForm({
       <div className="flex-1 p-6">
         <form
           action={async (formData) => {
-            await createReservationWithData(formData);
             resetRange();
+            await createReservationWithData(formData);
           }}
           className="space-y-6"
         >
@@ -146,6 +151,12 @@ function ReservationForm({
             </label>
           </div>
 
+          {/* Payment Method Selection */}
+          <PaymentMethodSelector
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+          />
+
           {/* Special Requests */}
           <div className="space-y-3">
             <div className="flex items-center gap-2 text-primary-200">
@@ -164,7 +175,11 @@ function ReservationForm({
 
           {/* Submit Button */}
           <div className="pt-4 border-t border-primary-800">
-            <SubmitButton>Reserve Now</SubmitButton>
+            <SubmitButton>
+              {paymentMethod === "online"
+                ? "Continue to Payment"
+                : "Reserve Now"}
+            </SubmitButton>
           </div>
         </form>
       </div>

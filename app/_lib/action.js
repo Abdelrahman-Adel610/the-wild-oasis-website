@@ -70,7 +70,12 @@ export async function createReservation(data, formData) {
     hasBreakfast: data.hasBreakfast,
     numberOfGuests: +formData.get("numberOfGuests"),
     observations: formData.get("observations"),
+    payment_method: data.isPaid ? "online" : "cash",
+    extraPrice: data.finalPrice - data.price,
+    status: "Pending",
+    updated_at: new Date(),
   };
+
   await createBooking(reservationData);
   redirect("/cabins/ThankYou");
 }
