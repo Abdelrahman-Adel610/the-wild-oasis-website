@@ -232,3 +232,61 @@ export async function deleteBooking(id) {
   }
   return data;
 }
+export async function createPaymentTransaction(sessionData, eventType) {
+  const { data, error } = await supabase
+    .from("payment_transactions")
+    .insert({
+      stripe_session_id: sessionData.id,
+      stripe_payment_intent_id: sessionData.payment_intent,
+      cabinId: sessionData.metadata.cabinId
+        ? parseInt(sessionData.metadata.cabinId)
+        : null,
+      payment_status: sessionData?.payment_status || "Failed",
+      session_status: sessionData.status,
+      event_type: eventType,
+      amount_total: sessionData?.amount_total || 0,
+      currency: sessionData.currency,
+      customer_email: sessionData.customer_details?.email,
+      customer_name: sessionData.customer_details?.name,
+      customer_country: sessionData.customer_details?.address?.country,
+      mode: sessionData.mode,
+      livemode: sessionData.livemode,
+      stripe_session_data: sessionData,
+      stripe_created_at: new Date(sessionData.created * 1000),
+      expires_at: new Date(sessionData.expires_at * 1000),
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error creating payment transaction:", error);
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateBookingPaymentStatus(
+  bookingId,
+  paymentStatus,
+  paymentTransactionId = null
+) {
+  const updateData = { payment_status: paymentStatus };
+  if (paymentTransactionId) {
+    updateData.payment_transaction_id = paymentTransactionId;
+  }
+
+  const { data, error } = await supabase
+    .from("Bookings")
+    .update(updateData)
+    .eq("id", bookingId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating booking payment status:", error);
+    throw error;
+  }
+
+  return data;
+}

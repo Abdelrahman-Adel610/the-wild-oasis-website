@@ -4,8 +4,6 @@ import Image from "next/image";
 import { updateMe } from "../_lib/action";
 import FormBtn from "./FormBtn";
 export default function ProfileForm({ selectCountry, user }) {
-  console.log(user);
-
   return (
     <form
       className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col"

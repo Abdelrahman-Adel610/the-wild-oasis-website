@@ -18,7 +18,6 @@ export default async function CabinList({ filter }) {
     default:
       displayedCabins = cabins;
   }
-  console.log(displayedCabins);
 
   return (
     <>

@@ -50,7 +50,11 @@ function ReservationForm({
     finalPrice: totalPrice,
   };
 
-  const createReservationWithData = createReservation.bind(null, bookingData);
+  const createReservationWithData = createReservation.bind(
+    null,
+    cabin.name,
+    bookingData
+  );
 
   if (!startDate || !endDate) {
     return (

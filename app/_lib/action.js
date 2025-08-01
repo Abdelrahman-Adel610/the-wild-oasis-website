@@ -62,7 +62,7 @@ export async function updateReservation(data) {
   await updateBooking(id, updatedData);
   redirect("/account/reservations");
 }
-export async function createReservation(data, formData) {
+export async function createReservation(cabinName, data, formData) {
   const session = await auth();
   if (!session) throw new Error("You must login first");
   const reservationData = {
@@ -76,6 +76,32 @@ export async function createReservation(data, formData) {
     updated_at: new Date(),
   };
 
-  await createBooking(reservationData);
-  redirect("/cabins/ThankYou");
+  const { id } = await createBooking(reservationData);
+  if (reservationData.payment_method !== "online") redirect("/cabins/ThankYou");
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    (process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000");
+
+  const res = await fetch(`${baseUrl}/api/create-checkout-session`, {
+    method: "POST",
+    body: JSON.stringify({
+      name: cabinName + " payment for " + reservationData.numberOfGuests,
+      amount: reservationData.finalPrice * 100,
+      cabinId: reservationData.cabinId,
+      bookingId: id,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to create checkout session: ${res.status}`);
+  }
+
+  const data_res = await res.json();
+  redirect(data_res.url);
 }
