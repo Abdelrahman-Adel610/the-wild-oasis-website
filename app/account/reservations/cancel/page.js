@@ -36,12 +36,12 @@ export default function PaymentCancel() {
           Browse Cabins
         </Link>
         <div>
-          <a
+          <Link
             href="/account/reservations"
             className="inline-block text-primary-600 hover:text-primary-700 underline"
           >
             View My Reservations
-          </a>
+          </Link>
         </div>
       </div>
     </div>

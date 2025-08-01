@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./SignOutButton";
+import Link from "next/link";
 
 const navLinks = [
   {
@@ -33,7 +34,7 @@ function SideNavigation({ signout_btn }) {
       <ul className="flex flex-col gap-2 h-full text-lg">
         {navLinks.map((link) => (
           <li key={link.name}>
-            <a
+            <Link
               className={`py-3 px-5 hover:bg-primary-900 hover:text-primary-100 transition-colors flex items-center gap-4 font-semibold text-primary-200
                 ${
                   pathname === link.href
@@ -45,7 +46,7 @@ function SideNavigation({ signout_btn }) {
             >
               {link.icon}
               <span>{link.name}</span>
-            </a>
+            </Link>
           </li>
         ))}
 
